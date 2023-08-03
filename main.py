@@ -1,6 +1,7 @@
 #Imports
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 import random
 
 #Function to define the next state based on the current cdf and prob r
@@ -39,10 +40,10 @@ for state in P:
     cdf.append(tmp)
 
 #Steps
-N = 10**7
+N = 10**6
 
 #Estado inicial -> puede ser cualquiera
-initial_state = 2
+initial_state = 4
 
 #Distribucion estacionaria
 p_i = np.array([0,0,0,0,0,0,0,0])
@@ -52,7 +53,7 @@ p_i[initial_state] = 1
 prev = initial_state
 
 i = 0
-while i < 1:
+while i < N:
     #Utilizar la cdf (cumulative function distribution) para definir el siguiente estado
     #if r<=F_i(0) => X siguiente = 0
     #if F_i(j-1) < r <= F_i(j) => X siguiente = j
@@ -67,8 +68,11 @@ while i < 1:
     prev = current
     i += 1
 
+    plt.plot(p_i/N)
+    plt.pause(0.1)
+
+plt.show()
 #Distribucion estacionaria
 dist = p_i/N
 print(dist)
-#plt.plot(np.arange(0,8),dist)
-#plt.show()
+
