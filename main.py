@@ -1,9 +1,10 @@
 #Imports
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib import animation
 import random
-
+import csv
+import pandas as pd
 #Function to define the next state based on the current cdf and prob r
 def next_state(current, r):
     if (r <= current[0]):
@@ -40,10 +41,10 @@ for state in P:
     cdf.append(tmp)
 
 #Steps
-N = 10**6
+N = 10**3
 
 #Estado inicial -> puede ser cualquiera
-initial_state = 4
+initial_state = 7
 
 #Distribucion estacionaria
 p_i = np.array([0,0,0,0,0,0,0,0])
@@ -54,6 +55,11 @@ p_i[initial_state] = 1
 prev = initial_state
 
 i = 0
+
+#Save results to animate bar plot
+f = open("./steady.csv", 'w')
+wr = csv.writer(f)
+wr.writerow(['index','0','1','2','3','4','5','6','7'])
 while i < N:
     #Utilizar la cdf (cumulative function distribution) para definir el siguiente estado
     #if r<=F_i(0) => X siguiente = 0
@@ -66,25 +72,17 @@ while i < N:
     current = next_state(cdf[prev], r)
     #Sumar 1 al estado en el cual caimos dependiendo de lo decidido anteriormente
     p_i[current] += 1
+    dist = p_i/N
+    wr.writerow([i, dist[0], dist[1], dist[2], dist[3], dist[4], dist[5], dist[6], dist[7]])
     prev = current
     i += 1
-    #plt.plot(p_i/N)
-    #plt.pause(0.001)
 
-    
-#plt.plot(p_i/N)
-    #plt.pause(0.1)
+f.close()
 
-dist = p_i/N
-states = ['0','1','2', '3', '4', '5', '6', '7']
-fig = plt.figure(figsize=(7,5))
-axes = fig.add_subplot(1,1,1)
-axes.set_ylim(0,0.5)
-plt.bar(states, dist, color='maroon', width=0.5)
-plt.title("Steady State Distribution - Initial state: "+str(initial_state))
-plt.xlabel("state")
-plt.ylabel("prob")
-plt.savefig('./steady.png')
-#Distribucion estacionaria
+fig, ax = plt.subplots()
+plt.bar(['0','1','2','3','4','5','6','7'], dist)
+ax.set_title('Steady State Distribution')
+ax.set_xlabel('State')
+ax.set_ylabel('Prob')
+plt.savefig("./steady-bar.png")
 
-print(dist)
