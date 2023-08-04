@@ -50,6 +50,7 @@ p_i = np.array([0,0,0,0,0,0,0,0])
 
 #Se inicia desde el estado 0 => se le suma 1
 p_i[initial_state] = 1
+
 prev = initial_state
 
 i = 0
@@ -67,12 +68,23 @@ while i < N:
     p_i[current] += 1
     prev = current
     i += 1
+    #plt.plot(p_i/N)
+    #plt.pause(0.001)
 
-    plt.plot(p_i/N)
-    plt.pause(0.1)
+    
+#plt.plot(p_i/N)
+    #plt.pause(0.1)
 
-plt.show()
-#Distribucion estacionaria
 dist = p_i/N
-print(dist)
+states = ['0','1','2', '3', '4', '5', '6', '7']
+fig = plt.figure(figsize=(7,5))
+axes = fig.add_subplot(1,1,1)
+axes.set_ylim(0,0.5)
+plt.bar(states, dist, color='maroon', width=0.5)
+plt.title("Steady State Distribution - Initial state: "+str(initial_state))
+plt.xlabel("state")
+plt.ylabel("prob")
+plt.savefig('./steady.png')
+#Distribucion estacionaria
 
+print(dist)
