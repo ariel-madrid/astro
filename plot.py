@@ -22,6 +22,6 @@ num_frames = len(df)
 print(len(df))
 # Crea la animación
 ani = FuncAnimation(fig, update, frames=num_frames, repeat=False, interval=1)
-plt.show()
+#plt.show()
 ani.save('steady.gif', writer=PillowWriter(fps=30))
 
